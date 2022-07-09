@@ -1,7 +1,7 @@
 <template>
-    <PageComponentVue title="Dashboard"> Content goes here </PageComponentVue>
+    <PageComponent title="Dashboard"> Content goes here </PageComponent>
 </template>
 
 <script setup>
-import PageComponentVue from "../components/PageComponent.vue";
+import PageComponent from "../components/PageComponent.vue";
 </script>

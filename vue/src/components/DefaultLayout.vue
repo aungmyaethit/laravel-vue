@@ -168,6 +168,7 @@
             </DisclosurePanel>
         </Disclosure>
         <router-view></router-view>
+        <NotificationBox />
     </div>
 </template>
 
@@ -185,10 +186,11 @@ import { MenuIcon, XIcon } from "@heroicons/vue/outline";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import NotificationBox from "./NotificationBox.vue";
 
 const navigation = [
     { name: "Dashboard", to: { name: "Dashboard" } },
-    { name: "Surveys", to: { name: "Surveys" } },
+    { name: "Shop", to: { name: "Shopes" } },
 ];
 const userNavigation = [
     { name: "Your Profile", to: "#" },
@@ -201,9 +203,10 @@ const user = computed(() => store.state.user.data);
 const router = useRouter();
 
 function logout() {
-    store.commit("logout");
-    router.push({
-        name: "Login",
+    store.dispatch("logout").then(() => {
+        router.push({
+            name: "Login",
+        });
     });
 }
 </script>
