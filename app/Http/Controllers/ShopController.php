@@ -25,7 +25,7 @@ class ShopController extends Controller
         if($user->is_admin){
             return ShopResource::collection(Shop::paginate(9));
         }
-        return ShopResource::collection(Shop::where('user_id', $user->id)->paginate(3));
+        return ShopResource::collection(Shop::where('user_id', $user->id)->paginate(9));
 
     }
 
@@ -46,12 +46,13 @@ class ShopController extends Controller
      */
     public function store(StoreShopRequest $request)
     {
+        $user = Auth::user();
         $data = $request->validated();
         if(isset($data['image'])) {
             $relativePath = $this->saveImage($data['image']);
             $data['image'] = $relativePath;
         }
-
+        $data['user_id'] = $user->id;
         $result = Shop::create($data);
          return new ShopResource($result);
     }

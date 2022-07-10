@@ -10,8 +10,11 @@
                 class="animate-fade-in-down"
                 api-key="AIzaSyAgGNVZLHZ0s5zjkM21dzmet6M0pz_VINw"
                 style="width: 100%; height: 600px"
+                zoom-control-position="TOP_LEFT"
                 :center="center"
+                :zoom-control="true"
                 :zoom="13"
+                @click="onClickMap"
             >
                 <MarkerCluster>
                     <Marker
@@ -89,10 +92,54 @@
 import PageComponent from "../components/PageComponent.vue";
 import store from "../store";
 import { GoogleMap, InfoWindow, Marker, MarkerCluster } from "vue3-google-map";
-store.dispatch("getUser");
-store.dispatch("getShopesLocation");
+import { useRouter } from "vue-router";
+import { ref, watch } from "vue";
+const router = useRouter();
 
-const user = store.state.user;
+store.dispatch("getShopesLocation");
 const shopes = store.state.shopesLocation;
 const center = { lat: 16.79920066822827, lng: 96.14941094105113 };
+store.dispatch("getUser");
+
+let model = ref({
+    id: null,
+    user_id: null,
+    name: "Custom Name",
+    image: null,
+    image_url: null,
+    latitude: null,
+    longitude: null,
+    address: "custom address",
+    hour: "custom time",
+    note: "",
+    tag: "Default",
+});
+
+watch(
+    () => store.state.currentShop.data,
+    (newVal) => {
+        model.value = {
+            ...JSON.parse(JSON.stringify(newVal)),
+        };
+    }
+);
+
+function onClickMap(e) {
+    let location;
+    location = e.latLng.toJSON();
+    model.value.latitude = location.lat;
+    model.value.longitude = location.lng;
+    if (confirm("Are you sure want to create new marker?")) {
+        store.dispatch("saveShop", { ...model.value }).then(({ data }) => {
+            router.push({
+                name: "ShopView",
+                params: { id: data.data.id },
+            });
+            store.commit("notify", {
+                type: "success",
+                message: "Shop was successfully Create",
+            });
+        });
+    }
+}
 </script>
