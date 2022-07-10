@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/user/password', [ AuthController::class, 'passwordChange']);
     Route::get( '/user', [ UserContorller::class, 'index']);
     Route::post('/user/profile', [ UserContorller::class, 'profileUpdate']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -25,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/shop-location', [ShopController::class, 'shopLocation']);
 });
 
-
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::get('/shop-by-slug/{shop:slug}', [ShopController::class, 'showForGuest']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

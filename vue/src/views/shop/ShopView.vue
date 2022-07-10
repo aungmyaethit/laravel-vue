@@ -88,6 +88,7 @@
                             >Shop Name</label
                         >
                         <input
+                            required
                             type="text"
                             name="name"
                             id="name"
@@ -106,6 +107,7 @@
                             >Latitude</label
                         >
                         <input
+                            required
                             type="text"
                             name="latitude"
                             id="latitude"
@@ -124,6 +126,7 @@
                             >Longitude</label
                         >
                         <input
+                            required
                             type="text"
                             name="longitude"
                             id="longitude"

@@ -192,7 +192,10 @@ const navigation = [
     { name: "Map", to: { name: "Map" } },
     { name: "Shop", to: { name: "Shopes" } },
 ];
-const userNavigation = [{ name: "Your Profile", to: { name: "UserProfile" } }];
+const userNavigation = [
+    { name: "Your Profile", to: { name: "UserProfile" } },
+    { name: "Password Change", to: { name: "UserPassword" } },
+];
 
 const store = useStore();
 const user = computed(() => store.state.user.data);

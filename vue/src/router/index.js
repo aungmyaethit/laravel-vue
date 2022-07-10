@@ -11,6 +11,8 @@ import ShopPublicView from "@/views/shop/ShopPublicView.vue";
 import ShopDetail from "@/views/shop/ShopDetail.vue";
 import MapView from "@/views/MapView.vue";
 import UserProfile from "@/views/user/UserProfile.vue";
+import UserPassword from "@/views/user/UserPassword.vue";
+import ForgotPassword from "@/views/ForgotPassword.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,12 @@ const router = createRouter({
                     name: "UserProfile",
                     component: UserProfile,
                 },
+
+                {
+                    path: "/user/password",
+                    name: "UserPassword",
+                    component: UserPassword,
+                },
             ],
         },
 
@@ -60,6 +68,11 @@ const router = createRouter({
             meta: { isGuest: true },
             children: [
                 { path: "/login", name: "Login", component: Login },
+                {
+                    path: "/forgot-password",
+                    name: "ForgotPassword",
+                    component: ForgotPassword,
+                },
                 { path: "/register", name: "Register", component: Register },
             ],
         },

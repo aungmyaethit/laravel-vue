@@ -33,16 +33,21 @@ const store = createStore({
     getters: {},
     actions: {
         register({ commit }, user) {
-            return axiosClient.post("/register", user).then(({ data }) => {
-                commit("setUser", data.user);
-                commit("setToken", data.token);
-                return data;
+            return axiosClient.post("/register", user).then((data) => {
+                if (data.data.success) {
+                    commit("setUser", data.data.user);
+                    commit("setToken", data.data.token);
+                }
+                return data.data;
             });
+        },
+
+        resetPassword({}, user) {
+            return axiosClient.post("/reset-password", user);
         },
 
         login({ commit }, user) {
             return axiosClient.post("/login", user).then(({ data }) => {
-                console.log(data);
                 commit("setUser", data.user);
                 commit("setToken", data.token);
                 return data;
@@ -50,9 +55,9 @@ const store = createStore({
         },
 
         logout({ commit }) {
-            return axiosClient.post("/logout").then((response) => {
+            return axiosClient.post("/logout").then((res) => {
                 commit("logout");
-                return response;
+                return res;
             });
         },
 
@@ -151,6 +156,12 @@ const store = createStore({
                     });
             }
             return response;
+        },
+
+        changePassword({}, user) {
+            return axiosClient.post(`/user/password`, user).then((res) => {
+                return res;
+            });
         },
     },
     mutations: {

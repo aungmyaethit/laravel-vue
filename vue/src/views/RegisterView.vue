@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>
+        <div class="mb-5">
             <img
                 class="w-auto h-12 mx-auto"
                 src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
@@ -20,6 +20,28 @@
                 </router-link>
             </p>
         </div>
+        <AlertBox v-if="errorMsg">
+            {{ errorMsg }}
+            <span
+                @click="errorMsg = ''"
+                class="w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer hover:bg-[rgba(0,0,0,0.2)]"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                    />
+                </svg>
+            </span>
+        </AlertBox>
         <form class="mt-8 space-y-6" @submit="register">
             <input type="hidden" name="remember" value="true" />
             <div class="-space-y-px rounded-md shadow-sm">
@@ -129,8 +151,10 @@
 
 <script setup>
 import { LockClosedIcon } from "@heroicons/vue/solid";
+import AlertBox from "../components/AlertComponent.vue";
 import store from "../store";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
 
 const router = useRouter();
 const user = {
@@ -140,12 +164,18 @@ const user = {
     password_confirmation: "",
 };
 
+let errorMsg = ref("");
+
 function register(ev) {
     ev.preventDefault();
-    store.dispatch("register", user).then(() => {
-        router.push({
-            name: "Map",
-        });
+    store.dispatch("register", user).then((data) => {
+        if (data.success) {
+            router.push({
+                name: "Map",
+            });
+        } else {
+            errorMsg.value = data.message;
+        }
     });
 }
 </script>

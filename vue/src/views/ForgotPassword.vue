@@ -7,20 +7,21 @@
                 alt="Workflow"
             />
             <h2 class="mt-6 text-3xl font-extrabold text-center text-gray-900">
-                Login to your account
+                Password Rest your account
             </h2>
             <p class="mt-2 text-sm text-center text-gray-600">
                 Or
                 {{ " " }}
                 <router-link
-                    :to="{ name: 'Register' }"
+                    :to="{ name: 'Login' }"
                     class="font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                    register to free
+                    login to your account
                 </router-link>
             </p>
         </div>
-        <form class="mt-8 space-y-6" @submit="login">
+
+        <form class="mt-8 space-y-6" @submit="resetPassword">
             <AlertBox v-if="errorMsg">
                 {{ errorMsg }}
                 <span
@@ -47,7 +48,7 @@
             <div class="-space-y-px rounded-md shadow-sm">
                 <div>
                     <label for="email-address" class="sr-only"
-                        >Email address</label
+                        >Enter Your Account Email</label
                     >
                     <input
                         id="email-address"
@@ -59,46 +60,6 @@
                         class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         placeholder="Email address"
                     />
-                </div>
-                <div>
-                    <label for="password" class="sr-only">Password</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        autocomplete="current-password"
-                        required=""
-                        v-model="user.password"
-                        class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="Password"
-                    />
-                </div>
-            </div>
-
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <input
-                        id="remember-me"
-                        name="remember-me"
-                        v-model="user.remember"
-                        type="checkbox"
-                        class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                    />
-                    <label
-                        for="remember-me"
-                        class="block ml-2 text-sm text-gray-900"
-                    >
-                        Remember me
-                    </label>
-                </div>
-
-                <div class="text-sm">
-                    <router-link
-                        :to="{ name: 'ForgotPassword' }"
-                        class="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                        Forgot your password?
-                    </router-link>
                 </div>
             </div>
 
@@ -115,7 +76,7 @@
                             aria-hidden="true"
                         />
                     </span>
-                    Sign in
+                    Reset Password
                 </button>
             </div>
         </form>
@@ -132,23 +93,20 @@ import AlertBox from "../components/AlertComponent.vue";
 const router = useRouter();
 const user = {
     email: "",
-    password: "",
-    remember: false,
 };
 
 let errorMsg = ref("");
 
-function login(ev) {
+function resetPassword(ev) {
     ev.preventDefault();
-    store
-        .dispatch("login", user)
-        .then(() => {
+    store.dispatch("resetPassword", user).then(({ data }) => {
+        if (data.success) {
             router.push({
-                name: "Map",
+                name: "Login",
             });
-        })
-        .catch((err) => {
-            errorMsg.value = err.response.data.error;
-        });
+        } else {
+            errorMsg.value = data.message;
+        }
+    });
 }
 </script>

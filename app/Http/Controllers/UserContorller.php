@@ -37,7 +37,6 @@ class UserContorller extends Controller
         $user->email = $request->email;
         $user->profile_image =  $request->profile_image;
         $user->save();
-
         return response()->json(['success' => true, 'message' => 'User was successfully updated', 'data' => $user]);
     }
 

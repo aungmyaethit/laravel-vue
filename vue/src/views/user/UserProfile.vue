@@ -66,7 +66,7 @@
                             name="name"
                             id="name"
                             v-model="model.name"
-                            autocomplete="shop_name"
+                            autocomplete="user_name"
                             class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
@@ -84,7 +84,7 @@
                             name="email"
                             id="email"
                             v-model="model.email"
-                            autocomplete="shop_email"
+                            autocomplete="user_email"
                             class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
@@ -95,14 +95,15 @@
                         <label
                             for="password"
                             class="block text-sm font-medium text-gray-700"
-                            >Password</label
+                            >Provide Your Password</label
                         >
                         <input
+                            required
                             type="password"
                             name="password"
                             id="password"
                             v-model="model.password"
-                            autocomplete="shop_password"
+                            autocomplete="user_password"
                             class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
@@ -119,7 +120,6 @@
                 </div>
             </div>
         </form>
-        <pre>{{ model }}</pre>
     </PageComponent>
 </template>
 
@@ -151,6 +151,7 @@ store.dispatch("getUser");
 function saveProfile() {
     store.dispatch("saveProfile", { ...model.value }).then(({ data }) => {
         let success = "success";
+        model.value.password = null;
         if (!data.success) {
             success = "error";
         }
