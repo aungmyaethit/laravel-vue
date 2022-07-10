@@ -42,7 +42,7 @@
                                         >
                                         <img
                                             class="w-8 h-8 rounded-full"
-                                            :src="user.imageUrl"
+                                            :src="user.profile_image_url"
                                             alt=""
                                         />
                                     </MenuButton>
@@ -63,13 +63,13 @@
                                             :key="item.name"
                                             v-slot="{ active }"
                                         >
-                                            <a
-                                                :href="item.href"
+                                            <RouterLink
+                                                :to="item.to"
                                                 :class="[
                                                     active ? 'bg-gray-100' : '',
                                                     'block px-4 py-2 text-sm text-gray-700 cursor-pointer',
                                                 ]"
-                                                >{{ item.name }}</a
+                                                >{{ item.name }}</RouterLink
                                             >
                                         </MenuItem>
                                         <MenuItem v-slot="{ active }">
@@ -130,7 +130,7 @@
                         <div class="flex-shrink-0">
                             <img
                                 class="w-10 h-10 rounded-full"
-                                :src="user.imageUrl"
+                                :src="user.profile_image_url"
                                 alt=""
                             />
                         </div>
@@ -148,13 +148,13 @@
                         </div>
                     </div>
                     <div class="px-2 mt-3 space-y-1">
-                        <DisclosureButton
+                        <RouterLink
                             v-for="item in userNavigation"
                             :key="item.name"
                             as="a"
-                            :href="item.href"
+                            :to="item.to"
                             class="block px-3 py-2 text-base font-medium text-gray-400 rounded-md cursor-pointer hover:text-white hover:bg-gray-700"
-                            >{{ item.name }}</DisclosureButton
+                            >{{ item.name }}</RouterLink
                         >
                         <DisclosureButton
                             as="a"
@@ -189,13 +189,10 @@ import { useStore } from "vuex";
 import NotificationBox from "./NotificationBox.vue";
 
 const navigation = [
-    { name: "Dashboard", to: { name: "Dashboard" } },
+    { name: "Map", to: { name: "Map" } },
     { name: "Shop", to: { name: "Shopes" } },
 ];
-const userNavigation = [
-    { name: "Your Profile", to: "#" },
-    { name: "Settings", to: "#" },
-];
+const userNavigation = [{ name: "Your Profile", to: { name: "UserProfile" } }];
 
 const store = useStore();
 const user = computed(() => store.state.user.data);

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UserContorller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,11 +18,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get( '/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get( '/user', [ UserContorller::class, 'index']);
+    Route::post('/user/profile', [ UserContorller::class, 'profileUpdate']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/shop', ShopController::class);
+    Route::get('/shop-location', [ShopController::class, 'shopLocation']);
 });
 
 

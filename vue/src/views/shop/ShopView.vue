@@ -232,8 +232,8 @@
 <script setup>
 import { ref, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import PageComponent from "@/components/PageComponent.vue";
 import store from "@/store";
+import PageComponent from "@/components/PageComponent.vue";
 
 const route = useRoute();
 const router = useRouter();

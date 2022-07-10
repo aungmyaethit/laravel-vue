@@ -19,6 +19,11 @@ const store = createStore({
             data: [],
         },
 
+        shopesLocation: {
+            loading: false,
+            data: {},
+        },
+
         notification: {
             show: false,
             type: null,
@@ -29,14 +34,17 @@ const store = createStore({
     actions: {
         register({ commit }, user) {
             return axiosClient.post("/register", user).then(({ data }) => {
-                commit("setUser", data);
+                commit("setUser", data.user);
+                commit("setToken", data.token);
                 return data;
             });
         },
 
         login({ commit }, user) {
             return axiosClient.post("/login", user).then(({ data }) => {
-                commit("setUser", data);
+                console.log(data);
+                commit("setUser", data.user);
+                commit("setToken", data.token);
                 return data;
             });
         },
@@ -48,12 +56,27 @@ const store = createStore({
             });
         },
 
+        getUser({ commit }) {
+            return axiosClient.get("/user").then((res) => {
+                commit("setUser", res.data);
+            });
+        },
+
         getShopes({ commit }, { url = null } = {}) {
             commit("setShopLoading", true);
             url = url || "shop";
             return axiosClient.get(url).then((res) => {
                 commit("setShopLoading", false);
                 commit("setShopes", res.data);
+                return res;
+            });
+        },
+
+        getShopesLocation({ commit }) {
+            commit("setShopesLocationLoading", true);
+            return axiosClient.get(`/shop-location/`).then((res) => {
+                commit("setShopesLocationLoading", false);
+                commit("setShopesLocation", res.data);
                 return res;
             });
         },
@@ -114,6 +137,21 @@ const store = createStore({
                     throw err;
                 });
         },
+
+        saveProfile({ commit }, user) {
+            let response;
+            if (user.id) {
+                response = axiosClient
+                    .post(`/user/profile`, user)
+                    .then((res) => {
+                        if (res.sucess) {
+                            commit("setUser", res.data.data);
+                        }
+                        return res;
+                    });
+            }
+            return response;
+        },
     },
     mutations: {
         logout: (state) => {
@@ -122,10 +160,12 @@ const store = createStore({
             state.user.token = null;
         },
 
-        setUser: (state, userData) => {
-            state.user.token = userData.token;
-            state.user.data = userData.user;
-            sessionStorage.setItem("TOKEN", userData.token);
+        setUser: (state, user) => {
+            state.user.data = user;
+        },
+        setToken: (state, token) => {
+            state.user.token = token;
+            sessionStorage.setItem("TOKEN", token);
         },
 
         setShopLoading: (state, loading) => {
@@ -135,6 +175,14 @@ const store = createStore({
         setShopes: (state, shopes) => {
             state.shopes.links = shopes.meta.links;
             state.shopes.data = shopes.data;
+        },
+
+        setShopesLocationLoading: (state, loading) => {
+            state.shopesLocation.loading = loading;
+        },
+
+        setShopesLocation: (state, shopes) => {
+            state.shopesLocation.data = shopes.data;
         },
 
         setCurrentShopLoading: (state, loading) => {

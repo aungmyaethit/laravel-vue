@@ -144,7 +144,7 @@ function login(ev) {
         .dispatch("login", user)
         .then(() => {
             router.push({
-                name: "Dashboard",
+                name: "Map",
             });
         })
         .catch((err) => {

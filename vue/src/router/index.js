@@ -1,25 +1,27 @@
 import { createRouter, createWebHistory } from "vue-router";
-import DefaultLayout from "../components/DefaultLayout.vue";
-import AuthLayout from "../components/AuthLayout.vue";
-import store from "../store";
+import DefaultLayout from "@/components/DefaultLayout.vue";
+import AuthLayout from "@/components/AuthLayout.vue";
+import store from "@/store";
 
-import Dashboard from "@/views/DashboardView.vue";
 import Login from "@/views/LoginView.vue";
 import Register from "@/views/RegisterView.vue";
 import ShopView from "@/views/shop/ShopView.vue";
 import ShopList from "@/views/shop/ShopList.vue";
 import ShopPublicView from "@/views/shop/ShopPublicView.vue";
+import ShopDetail from "@/views/shop/ShopDetail.vue";
+import MapView from "@/views/MapView.vue";
+import UserProfile from "@/views/user/UserProfile.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: "/",
-            redirect: "/dashboard",
+            redirect: "/map",
             component: DefaultLayout,
             meta: { requiresAuth: true },
             children: [
-                { path: "/dashboard", name: "Dashboard", component: Dashboard },
+                { path: "/map", name: "Map", component: MapView },
                 { path: "/shop-list", name: "Shopes", component: ShopList },
                 {
                     path: "/shop/create",
@@ -30,6 +32,17 @@ const router = createRouter({
                     path: "/shop/:id",
                     name: "ShopView",
                     component: ShopView,
+                },
+                {
+                    path: "/shop-detail/:id",
+                    name: "ShopDetail",
+                    component: ShopDetail,
+                },
+
+                {
+                    path: "/user/profile",
+                    name: "UserProfile",
+                    component: UserProfile,
                 },
             ],
         },
@@ -57,7 +70,7 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !store.state.user.token) {
         next({ name: "Login" });
     } else if (store.state.user.token && to.meta.isGuest) {
-        next({ name: "Dashboard" });
+        next({ name: "MapView" });
     } else {
         next();
     }

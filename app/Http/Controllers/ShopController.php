@@ -21,8 +21,21 @@ class ShopController extends Controller
     public function index()
     {
         $user = Auth::user();
+
+        if($user->is_admin){
+            return ShopResource::collection(Shop::paginate(9));
+        }
         return ShopResource::collection(Shop::where('user_id', $user->id)->paginate(3));
 
+    }
+
+    public function shopLocation()
+    {
+        $user = Auth::user();
+        if ($user->is_admin) {
+            return ShopResource::collection(Shop::all());
+        }
+        return ShopResource::collection(Shop::where('user_id', $user->id)->get());
     }
 
     /**
@@ -52,7 +65,7 @@ class ShopController extends Controller
     public function show(Shop $shop)
     {
         $user =Auth::user();
-        if($user->id !== $shop->user_id){
+        if($user->id !== $shop->user_id && !$user->is_admin){
             return abort(403, 'Unauthorized action.');
         }
         return new ShopResource($shop);
@@ -95,7 +108,7 @@ class ShopController extends Controller
     public function destroy(Shop $shop)
     {
         $user = Auth::user();
-        if ($user->id !== $shop->user_id) {
+        if ($user->id !== $shop->user_id && !$user->is_admin) {
             return abort(403, 'Unauthorized action.');
         }
         if ($shop->image) {

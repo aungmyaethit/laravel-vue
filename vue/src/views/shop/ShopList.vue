@@ -32,6 +32,7 @@
                     v-for="(shop, index) in shopes.data"
                     :key="shop.id"
                     :shop="shop"
+                    :user="user.data"
                     class="opacity-0 animate-fade-in-down"
                     :style="{ animationDelay: `${index * 0.1}s` }"
                     @delete="deleteShop(shop)"
@@ -74,11 +75,13 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import PageComponent from "@/components/PageComponent.vue";
 import ShopListItem from "./ShopListItem.vue";
-const shopes = computed(() => store.state.shopes);
-
-const router = useRouter();
 
 store.dispatch("getShopes");
+store.dispatch("getUser");
+
+const shopes = computed(() => store.state.shopes);
+const router = useRouter();
+const user = store.state.user;
 
 function deleteShop(shop) {
     if (confirm("Are you sure want to delete? Operation can't be undone!!")) {

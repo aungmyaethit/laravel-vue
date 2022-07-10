@@ -31,11 +31,18 @@
 
             <div class="p-4 text-xs text-gray-700 border-t border-b">
                 <span class="flex items-center mb-1">
-                    <p class="mt-2 mb-2"><b>Creator</b> - Aung Nyi Thit</p>
+                    <p class="mt-2 mb-2">
+                        <b>Creator</b> - {{ shop.creator_name }}
+                    </p>
                 </span>
                 <span class="flex items-center mb-1">
                     <p class="mt-2 mb-2">
                         <b>Created Date</b> - {{ shop.created_at }}
+                    </p>
+                </span>
+                <span class="flex items-center mb-1">
+                    <p class="mt-2 mb-2">
+                        <b>Updated Date</b> - {{ shop.updated_at }}
                     </p>
                 </span>
             </div>
@@ -43,7 +50,7 @@
             <div class="flex justify-start p-4 space-x-5 text-sm item-center">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6"
+                    class="w-6 h-6 text-green-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -61,42 +68,31 @@
                     />
                 </svg>
 
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    />
-                </svg>
-
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                </svg>
-
                 <router-link
+                    :to="{ name: 'ShopDetail', params: { id: shop.id } }"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-6 h-6 text-blue-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                    </svg>
+                </router-link>
+                <router-link
+                    v-if="user.id == shop.user_id"
                     :to="{ name: 'ShopView', params: { id: shop.id } }"
                 >
                     <svg
@@ -114,7 +110,11 @@
                         />
                     </svg>
                 </router-link>
-                <button type="button" @click="emit('delete', shop)">
+                <button
+                    type="button"
+                    @click="emit('delete', shop)"
+                    v-if="user.id == shop.user_id || user.is_admin"
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-6 h-6 text-red-500"
@@ -137,8 +137,10 @@
 
 <script setup>
 // eslint-disable-next-line vue/no-setup-props-destructure
-const { shop } = defineProps({
+defineProps({
     shop: Object,
+    user: Object,
 });
+
 const emit = defineEmits(["delete"]);
 </script>

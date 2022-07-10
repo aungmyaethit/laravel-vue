@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,6 +19,7 @@ class ShopResource extends JsonResource
        return [
         'id' => $this->id,
         'user_id' => $this->user_id,
+        'creator_name' => $this->createName($this->user_id),
         'image_url' => $this->image ? URL::to($this->image) : null,
         'name' => $this->name,
         'address' => $this->address,
@@ -30,5 +32,9 @@ class ShopResource extends JsonResource
         'created_at' => (new \DateTime($this->created_at))->format('Y-m-d H:i:s'),
         'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d H:i:s'),
        ];
+    }
+
+    private function createName($id){
+        return $name = User::where('id', $id)->pluck('name')->first();
     }
 }
