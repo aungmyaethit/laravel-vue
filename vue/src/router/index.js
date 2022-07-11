@@ -23,8 +23,16 @@ const router = createRouter({
             component: DefaultLayout,
             meta: { requiresAuth: true },
             children: [
-                { path: "/map", name: "Map", component: MapView },
-                { path: "/shop-list", name: "Shopes", component: ShopList },
+                {
+                    path: "/map",
+                    name: "Map",
+                    component: MapView,
+                },
+                {
+                    path: "/shop-list",
+                    name: "Shopes",
+                    component: ShopList,
+                },
                 {
                     path: "/shop/create",
                     name: "ShopCreate",

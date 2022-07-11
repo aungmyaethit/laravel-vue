@@ -18,12 +18,7 @@
                                     :key="item.name"
                                     :to="item.to"
                                     active-class="text-white bg-gray-900"
-                                    :class="[
-                                        this.$route.name === item.to.name
-                                            ? ''
-                                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                        'px-3 py-2 rounded-md text-sm font-medium',
-                                    ]"
+                                    class="px-3 py-2 text-sm font-medium text-white rounded-md"
                                     >{{ item.name }}</router-link
                                 >
                             </div>
@@ -116,12 +111,7 @@
                         as="a"
                         :to="item.to"
                         active-class="text-white bg-gray-900"
-                        :class="[
-                            this.$route.name === item.to.name
-                                ? ''
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                            'block px-3 py-2 rounded-md text-base font-medium',
-                        ]"
+                        class="block px-3 py-2 text-base font-medium text-white rounded-md"
                         >{{ item.name }}</router-link
                     >
                 </div>
@@ -182,6 +172,7 @@ import {
     MenuItem,
     MenuItems,
 } from "@headlessui/vue";
+
 import { MenuIcon, XIcon } from "@heroicons/vue/outline";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
