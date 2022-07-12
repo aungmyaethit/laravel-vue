@@ -32,6 +32,7 @@ const store = createStore({
     },
     getters: {},
     actions: {
+        // account registration
         register({ commit }, user) {
             return axiosClient.post("/register", user).then((data) => {
                 if (data.data.success) {
@@ -41,11 +42,11 @@ const store = createStore({
                 return data.data;
             });
         },
-
+        //account password change
         resetPassword({}, user) {
             return axiosClient.post("/reset-password", user);
         },
-
+        //account login
         login({ commit }, user) {
             return axiosClient.post("/login", user).then(({ data }) => {
                 commit("setUser", data.user);
@@ -53,20 +54,20 @@ const store = createStore({
                 return data;
             });
         },
-
+        //account logout
         logout({ commit }) {
             return axiosClient.post("/logout").then((res) => {
                 commit("logout");
                 return res;
             });
         },
-
+        //get login user info
         getUser({ commit }) {
             return axiosClient.get("/user").then((res) => {
                 commit("setUser", res.data);
             });
         },
-
+        //get all of shope
         getShopes({ commit }, { url = null } = {}) {
             commit("setShopLoading", true);
             url = url || "shop";
@@ -77,6 +78,7 @@ const store = createStore({
             });
         },
 
+        //get shopes list for map
         getShopesLocation({ commit }) {
             commit("setShopesLocationLoading", true);
             return axiosClient.get(`/shop-location/`).then((res) => {
@@ -86,6 +88,7 @@ const store = createStore({
             });
         },
 
+        //get shop by id
         getShop({ commit }, id) {
             commit("setCurrentShopLoading", true);
             return axiosClient
@@ -101,7 +104,7 @@ const store = createStore({
                     throw err;
                 });
         },
-
+        //create or update shop
         saveShop({ commit }, shop) {
             delete shop.image_url;
             let response;
@@ -120,7 +123,7 @@ const store = createStore({
             }
             return response;
         },
-
+        // delete shop by id
         deleteShop({ dispatch }, id) {
             return axiosClient.delete(`/shop/${id}`).then((res) => {
                 dispatch("getShopes");
@@ -128,6 +131,7 @@ const store = createStore({
             });
         },
 
+        //for share location for public by slug url
         getShopBySlug({ commit }, slug) {
             commit("setCurrentShopLoading", true);
             return axiosClient
@@ -143,6 +147,7 @@ const store = createStore({
                 });
         },
 
+        //profile update for user
         saveProfile({ commit }, user) {
             let response;
             if (user.id) {
@@ -158,12 +163,14 @@ const store = createStore({
             return response;
         },
 
+        // password change
         changePassword({}, user) {
             return axiosClient.post(`/user/password`, user).then((res) => {
                 return res;
             });
         },
     },
+
     mutations: {
         logout: (state) => {
             sessionStorage.removeItem("TOKEN");

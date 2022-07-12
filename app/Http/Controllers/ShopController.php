@@ -18,6 +18,8 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     //get shopes for admin or authenticated user.
     public function index()
     {
         $user = Auth::user();
@@ -28,7 +30,7 @@ class ShopController extends Controller
         return ShopResource::collection(Shop::where('user_id', $user->id)->paginate(9));
 
     }
-
+// get all shopes for map marker
     public function shopLocation()
     {
         $user = Auth::user();
@@ -44,6 +46,8 @@ class ShopController extends Controller
      * @param  \App\Http\Requests\StoreShopRequest  $request
      * @return \Illuminate\Http\Response
      */
+
+     // create and store new shop
     public function store(StoreShopRequest $request)
     {
         $user = Auth::user();
@@ -63,6 +67,8 @@ class ShopController extends Controller
      * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Http\Response
      */
+
+     // get shope by id
     public function show(Shop $shop)
     {
         $user =Auth::user();
@@ -83,6 +89,8 @@ class ShopController extends Controller
      * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Http\Response
      */
+
+     //update shop by id
     public function update(UpdateShopRequest $request, Shop $shop)
     {
         $data = $request->validated();
@@ -106,6 +114,8 @@ class ShopController extends Controller
      * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Http\Response
      */
+
+    //delete shop by id
     public function destroy(Shop $shop)
     {
         $user = Auth::user();
@@ -119,7 +129,7 @@ class ShopController extends Controller
         $shop->delete();
         return response('',204);
     }
-
+    // private function for base 64 image to store in server
     private function saveImage($image){
         if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
 
