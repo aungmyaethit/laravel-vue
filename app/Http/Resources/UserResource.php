@@ -18,7 +18,8 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'profile_image' => $this->profile_image ? URL::to($this->profile_image) : null,
+            'profile_image' => $this->profile_image,
+            'profile_image_url' => $this->profile_image ? URL::to($this->profile_image) : null,
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at,
             'is_admin' => $this->is_admin,

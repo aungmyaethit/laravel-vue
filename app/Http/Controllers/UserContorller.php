@@ -17,6 +17,8 @@ class UserContorller extends Controller
         $user = Auth::user();
         $user->profile_image_url = ($user->profile_image ? URL::to($user->profile_image) : null);
         $user->profile_image = null;
+        $user->bg_image_url = ($user->bg_image ? URL::to($user->bg_image) : null);
+        $user->bg_image = null;
         return $user;
     }
 
@@ -31,11 +33,17 @@ class UserContorller extends Controller
         if (isset($request->profile_image)) {
             $relativePath = $this->saveImage($request->profile_image);
             $request->profile_image = $relativePath;
+            $user->profile_image =  $request->profile_image;
+        }
+
+        if (isset($request->bg_image)) {
+            $relativePath = $this->saveImage($request->bg_image);
+            $request->bg_image = $relativePath;
+            $user->bg_image =  $request->bg_image;
         }
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->profile_image =  $request->profile_image;
         $user->save();
         return response()->json(['success' => true, 'message' => 'User was successfully updated', 'data' => $user]);
     }

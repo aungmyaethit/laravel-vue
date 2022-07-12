@@ -1,6 +1,13 @@
 <template>
     <div>
-        <PageComponent title="Map">
+        <PageComponent
+            title="Map"
+            :bg_image="
+                user.data.bg_image_url
+                    ? user.data.bg_image_url
+                    : 'https://img.freepik.com/free-photo/gray-abstract-wireframe-technology-background_53876-101941.jpg?w=2000'
+            "
+        >
             <div v-if="shopes.loading" class="flex justify-center">
                 Loading...
             </div>
@@ -97,9 +104,12 @@ import { ref, watch } from "vue";
 const router = useRouter();
 
 store.dispatch("getShopesLocation");
+
 const shopes = store.state.shopesLocation;
 const center = { lat: 16.79920066822827, lng: 96.14941094105113 };
+
 store.dispatch("getUser");
+const user = store.state.user;
 
 let model = ref({
     id: null,
