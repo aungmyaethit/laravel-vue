@@ -78,6 +78,28 @@ const store = createStore({
             });
         },
 
+        // search shop by name, address
+
+        searchShop({ commit }, shop) {
+            commit("setShopLoading", true);
+            return axiosClient.post("/shop/search", shop).then((res) => {
+                console.log(res.data);
+                commit("setShopLoading", false);
+                commit("setShops", res.data);
+                return res;
+            });
+        },
+
+        filterShop({ commit }, shop) {
+            commit("setShopLoading", true);
+            return axiosClient.post("/shop/filter", shop).then((res) => {
+                console.log(res.data);
+                commit("setShopLoading", false);
+                commit("setShops", res.data);
+                return res;
+            });
+        },
+
         //get shops list for map
         getShopsLocation({ commit }) {
             commit("setShopsLocationLoading", true);

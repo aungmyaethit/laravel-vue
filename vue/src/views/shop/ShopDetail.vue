@@ -35,7 +35,11 @@
             class="block overflow-hidden bg-white rounded-lg shadow-md animate-fade-in-down"
         >
             <div class="pt-10 pb-10">
-                <img class="w-8/12 mx-auto" :src="shop.data.image_url" alt="" />
+                <img
+                    class="w-8/12 mx-auto"
+                    :src="shop.data.image_url"
+                    :alt="shop.data.name"
+                />
             </div>
 
             <div class="h-40 p-4">
@@ -67,19 +71,32 @@
             </div>
 
             <div class="p-4 text-xs text-gray-700 border-t border-b">
-                <span class="flex items-center mb-1">
-                    <p class="mt-2 mb-2"><b>Creator</b> - Aung Nyi Thit</p>
-                </span>
-                <span class="flex items-center mb-1">
-                    <p class="mt-2 mb-2">
-                        <b>Created Date</b> - {{ shop.data.created_at }}
-                    </p>
-                </span>
-                <span class="flex items-center mb-1">
-                    <p class="mt-2 mb-2">
-                        <b>Updated Date</b> - {{ shop.data.updated_at }}
-                    </p>
-                </span>
+                <div class="grid grid-flow-col grid-rows-1 gap-4">
+                    <div id="profile_img">
+                        <img
+                            class="rounded-full w-30 h-30"
+                            :src="user.data.profile_image_url"
+                            :alt="user.data.name"
+                        />
+                    </div>
+                    <div id="profile_info">
+                        <span class="flex items-center mb-1">
+                            <p class="mt-2 mb-2">
+                                <b>Creator</b> - Aung Nyi Thit
+                            </p>
+                        </span>
+                        <span class="flex items-center mb-1">
+                            <p class="mt-2 mb-2">
+                                <b>Created Date</b> - {{ shop.data.created_at }}
+                            </p>
+                        </span>
+                        <span class="flex items-center mb-1">
+                            <p class="mt-2 mb-2">
+                                <b>Updated Date</b> - {{ shop.data.updated_at }}
+                            </p>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </PageComponent>
@@ -92,10 +109,9 @@ import PageComponent from "@/components/PageComponent.vue";
 const route = useRoute();
 
 store.dispatch("getUser");
-
+const user = store.state.user;
 const shop = store.state.currentShop;
 if (route.params.id) {
     store.dispatch("getShop", route.params.id);
 }
-const user = store.state.user;
 </script>

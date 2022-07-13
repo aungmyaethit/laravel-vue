@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Shop;
 use Illuminate\Support\Str;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ShopResource;
 use Illuminate\Support\Facades\Auth;
@@ -44,12 +44,13 @@ class ShopController extends Controller
     //get all shops depend on filter value
 
     public function shopFilter(Request $request){
+
         $user = Auth::user();
         if($user->is_admin){
-            return ShopResource::collection(Shop::whereBetween('created_at', [$request->start_date, $request->end_date])->get());
+            return ShopResource::collection(Shop::whereBetween('created_at', [$request->start, $request->end])->get());
         }
         return ShopResource::collection(Shop::where('user_id', $user->id)
-            ->whereBetween('created_at', [$request->start_date, $request->end_date])->get());
+            ->whereBetween('created_at', [$request->start, $request->end])->get());
     }
 
     //Search shops by name , address and tag
@@ -57,41 +58,24 @@ class ShopController extends Controller
 
         $user = Auth::user();
 
-        $search_value = $request->search_value;
+        $search_value = $request->key;
 
         if($user->is_admin){
 
-            $name = DB::table('shops')
-            ->where('name', 'LIKE', '%' . $search_value . '%');
-
-            $address = DB::table('shops')
-                ->where('address', 'LIKE',  '%' . $search_value . '%');
-
-            $tag = DB::table('shops')
-                ->where('tag', 'LIKE',  '%' . $search_value . '%');
-
-            return ShopResource::collection(DB::table('shops')
-                ->union($name)
-                ->union($address)
-                ->union($tag)
-                ->get());
+            $data = Shop::where(function ($query) use ($search_value) {
+                $query->where('name', 'like', '%' . $search_value . '%')
+                    ->orWhere('address', 'like', '%' . $search_value . '%')
+                    ->orWhere('tag', 'like', '%' . $search_value . '%');
+            })->get();
         }
 
-        $name = DB::table('shops')
-            ->where('name', 'LIKE', '%' . $search_value . '%');
+       $data = Shop::where('user_id', $user->id)->where(function ($query) use ($search_value) {
+                    $query->where('name', 'like', '%' . $search_value . '%')
+                    ->orWhere('address', 'like', '%' . $search_value . '%')
+                    ->orWhere('tag', 'like', '%' . $search_value . '%');
+                })->get();
 
-        $address = DB::table('shops')
-            ->where('address', 'LIKE',  '%' . $search_value . '%');
-
-        $tag = DB::table('shops')
-            ->where('tag', 'LIKE',  '%' . $search_value . '%');
-
-        return ShopResource::collection(DB::table('shops')
-            ->where('user_id', $user->id )
-            ->union($name)
-            ->union($address)
-            ->union($tag)
-            ->get());
+        return ShopResource::collection($data);
     }
 
     /**

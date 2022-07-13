@@ -14,6 +14,7 @@
     "axios": "^0.27.2",
     "babel-runtime": "^6.26.0",
     "marker-clusterer-plus": "^2.1.4",
+    "v-calendar": "^3.0.0-alpha.8",
     "vue": "^3.2.37",
     "vue-router": "^4.0.16",
     "vue3-google-map": "^0.13.2",

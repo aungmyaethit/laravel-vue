@@ -8,7 +8,7 @@
                     : 'https://img.freepik.com/free-photo/gray-abstract-wireframe-technology-background_53876-101941.jpg?w=2000'
             "
         >
-            <div v-if="shopes.loading" class="flex justify-center">
+            <div v-if="shops.loading" class="flex justify-center">
                 Loading...
             </div>
 
@@ -25,7 +25,7 @@
             >
                 <MarkerCluster>
                     <Marker
-                        v-for="shop in shopes.data"
+                        v-for="shop in shops.data"
                         v-on:click="markerClick"
                         :key="shop.id"
                         :options="{
@@ -65,7 +65,7 @@
                                     <p
                                         class="mb-3 font-normal text-gray-700 dark:text-gray-400"
                                     >
-                                        Open Time - {{ shop.hour }}
+                                        Created At - {{ shop.created_at }}
                                     </p>
 
                                     <p
@@ -103,9 +103,9 @@ import { useRouter } from "vue-router";
 import { ref, watch } from "vue";
 const router = useRouter();
 
-store.dispatch("getShopesLocation");
+store.dispatch("getShopsLocation");
 
-const shopes = store.state.shopesLocation;
+const shops = store.state.shopsLocation;
 const center = { lat: 16.79920066822827, lng: 96.14941094105113 };
 
 store.dispatch("getUser");
@@ -139,7 +139,7 @@ function onClickMap(e) {
     location = e.latLng.toJSON();
     model.value.latitude = location.lat;
     model.value.longitude = location.lng;
-    if (confirm("Are you sure want to create new marker?")) {
+    if (confirm("Are you sure want to create new shop?")) {
         store.dispatch("saveShop", { ...model.value }).then(({ data }) => {
             router.push({
                 name: "ShopView",

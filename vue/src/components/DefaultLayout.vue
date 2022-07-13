@@ -38,7 +38,7 @@
                                         <img
                                             class="w-8 h-8 rounded-full"
                                             :src="user.profile_image_url"
-                                            alt=""
+                                            :alt="user.name"
                                         />
                                     </MenuButton>
                                 </div>
