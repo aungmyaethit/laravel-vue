@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/shop', ShopController::class);
     Route::get('/shop-location', [ShopController::class, 'shopLocation']);
+    Route::post('/shop/filter' , [ShopController::class, 'shopFilter']);
+    Route::post('/shop/search' , [ShopController::class, 'shopSearch']);
 });
 
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);

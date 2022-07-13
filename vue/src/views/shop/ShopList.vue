@@ -25,11 +25,11 @@
                 >
             </div>
         </template>
-        <div v-if="shopes.loading" class="flex justify-center">Loading...</div>
+        <div v-if="shops.loading" class="flex justify-center">Loading...</div>
         <div v-else>
             <div class="flex flex-wrap -mx-4">
                 <ShopListItem
-                    v-for="(shop, index) in shopes.data"
+                    v-for="(shop, index) in shops.data"
                     :key="shop.id"
                     :shop="shop"
                     :user="user.data"
@@ -44,7 +44,7 @@
                     aria-label="Pagination"
                 >
                     <a
-                        v-for="(link, i) of shopes.links"
+                        v-for="(link, i) of shops.links"
                         :key="i"
                         :disabled="!link.url"
                         href="#"
@@ -58,7 +58,7 @@
                             i === 0
                                 ? 'rounded-l-md bg-gray-100 text-gray-700'
                                 : '',
-                            i === shopes.links.length - 1 ? 'rounded-r-md' : '',
+                            i === shops.links.length - 1 ? 'rounded-r-md' : '',
                         ]"
                         v-html="link.label"
                     >
@@ -76,10 +76,10 @@ import { useRouter } from "vue-router";
 import PageComponent from "@/components/PageComponent.vue";
 import ShopListItem from "./ShopListItem.vue";
 
-store.dispatch("getShopes");
+store.dispatch("getShops");
 store.dispatch("getUser");
 
-const shopes = computed(() => store.state.shopes);
+const shops = computed(() => store.state.shops);
 const router = useRouter();
 const user = store.state.user;
 
@@ -87,7 +87,7 @@ function deleteShop(shop) {
     if (confirm("Are you sure want to delete? Operation can't be undone!!")) {
         store.dispatch("deleteShop", shop.id).then(() => {
             router.push({
-                name: "Shopes",
+                name: "Shops",
             });
         });
     }
@@ -99,7 +99,7 @@ function getForPage(ev, link) {
         return;
     }
 
-    store.dispatch("getShopes", { url: link.url });
+    store.dispatch("getShops", { url: link.url });
 }
 </script>
 

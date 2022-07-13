@@ -299,7 +299,7 @@ function deleteShop() {
     if (confirm("Are you sure want to delete? Operation can't be undone!!")) {
         store.dispatch("deleteShop", model.value.id).then(() => {
             router.push({
-                name: "Shopes",
+                name: "Shops",
             });
         });
     }

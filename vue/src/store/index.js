@@ -13,13 +13,13 @@ const store = createStore({
             data: {},
         },
 
-        shopes: {
+        shops: {
             loading: false,
             links: [],
             data: [],
         },
 
-        shopesLocation: {
+        shopsLocation: {
             loading: false,
             data: {},
         },
@@ -68,22 +68,22 @@ const store = createStore({
             });
         },
         //get all of shope
-        getShopes({ commit }, { url = null } = {}) {
+        getShops({ commit }, { url = null } = {}) {
             commit("setShopLoading", true);
             url = url || "shop";
             return axiosClient.get(url).then((res) => {
                 commit("setShopLoading", false);
-                commit("setShopes", res.data);
+                commit("setShops", res.data);
                 return res;
             });
         },
 
-        //get shopes list for map
-        getShopesLocation({ commit }) {
-            commit("setShopesLocationLoading", true);
+        //get shops list for map
+        getShopsLocation({ commit }) {
+            commit("setShopsLocationLoading", true);
             return axiosClient.get(`/shop-location/`).then((res) => {
-                commit("setShopesLocationLoading", false);
-                commit("setShopesLocation", res.data);
+                commit("setShopsLocationLoading", false);
+                commit("setShopsLocation", res.data);
                 return res;
             });
         },
@@ -126,7 +126,7 @@ const store = createStore({
         // delete shop by id
         deleteShop({ dispatch }, id) {
             return axiosClient.delete(`/shop/${id}`).then((res) => {
-                dispatch("getShopes");
+                dispatch("getShops");
                 return res;
             });
         },
@@ -187,20 +187,20 @@ const store = createStore({
         },
 
         setShopLoading: (state, loading) => {
-            state.shopes.loading = loading;
+            state.shops.loading = loading;
         },
 
-        setShopes: (state, shopes) => {
-            state.shopes.links = shopes.meta.links;
-            state.shopes.data = shopes.data;
+        setShops: (state, shops) => {
+            state.shops.links = shops.meta.links;
+            state.shops.data = shops.data;
         },
 
-        setShopesLocationLoading: (state, loading) => {
-            state.shopesLocation.loading = loading;
+        setShopsLocationLoading: (state, loading) => {
+            state.shopsLocation.loading = loading;
         },
 
-        setShopesLocation: (state, shopes) => {
-            state.shopesLocation.data = shopes.data;
+        setShopsLocation: (state, shops) => {
+            state.shopsLocation.data = shops.data;
         },
 
         setCurrentShopLoading: (state, loading) => {

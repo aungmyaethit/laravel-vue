@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use Illuminate\Support\Str;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\ShopResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -19,7 +20,7 @@ class ShopController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     //get shopes for admin or authenticated user.
+     //get shops for admin or authenticated user.
     public function index()
     {
         $user = Auth::user();
@@ -30,7 +31,7 @@ class ShopController extends Controller
         return ShopResource::collection(Shop::where('user_id', $user->id)->paginate(9));
 
     }
-// get all shopes for map marker
+// get all shops for map marker
     public function shopLocation()
     {
         $user = Auth::user();
@@ -38,6 +39,59 @@ class ShopController extends Controller
             return ShopResource::collection(Shop::all());
         }
         return ShopResource::collection(Shop::where('user_id', $user->id)->get());
+    }
+
+    //get all shops depend on filter value
+
+    public function shopFilter(Request $request){
+        $user = Auth::user();
+        if($user->is_admin){
+            return ShopResource::collection(Shop::whereBetween('created_at', [$request->start_date, $request->end_date])->get());
+        }
+        return ShopResource::collection(Shop::where('user_id', $user->id)
+            ->whereBetween('created_at', [$request->start_date, $request->end_date])->get());
+    }
+
+    //Search shops by name , address and tag
+    public function shopSearch(Request $request){
+
+        $user = Auth::user();
+
+        $search_value = $request->search_value;
+
+        if($user->is_admin){
+
+            $name = DB::table('shops')
+            ->where('name', 'LIKE', '%' . $search_value . '%');
+
+            $address = DB::table('shops')
+                ->where('address', 'LIKE',  '%' . $search_value . '%');
+
+            $tag = DB::table('shops')
+                ->where('tag', 'LIKE',  '%' . $search_value . '%');
+
+            return ShopResource::collection(DB::table('shops')
+                ->union($name)
+                ->union($address)
+                ->union($tag)
+                ->get());
+        }
+
+        $name = DB::table('shops')
+            ->where('name', 'LIKE', '%' . $search_value . '%');
+
+        $address = DB::table('shops')
+            ->where('address', 'LIKE',  '%' . $search_value . '%');
+
+        $tag = DB::table('shops')
+            ->where('tag', 'LIKE',  '%' . $search_value . '%');
+
+        return ShopResource::collection(DB::table('shops')
+            ->where('user_id', $user->id )
+            ->union($name)
+            ->union($address)
+            ->union($tag)
+            ->get());
     }
 
     /**

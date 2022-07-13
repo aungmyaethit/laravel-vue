@@ -181,7 +181,7 @@ import NotificationBox from "./NotificationBox.vue";
 
 const navigation = [
     { name: "Map", to: { name: "Map" } },
-    { name: "Shop", to: { name: "Shopes" } },
+    { name: "Shop", to: { name: "Shops" } },
 ];
 const userNavigation = [
     { name: "Your Profile", to: { name: "UserProfile" } },
