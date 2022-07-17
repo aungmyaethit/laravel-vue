@@ -47,10 +47,10 @@ class ShopController extends Controller
 
         $user = Auth::user();
         if($user->is_admin){
-            return ShopResource::collection(Shop::whereBetween('created_at', [$request->start, $request->end])->get());
+            return ShopResource::collection(Shop::whereBetween('created_at', [$request->start, $request->end])->paginate(9));
         }
         return ShopResource::collection(Shop::where('user_id', $user->id)
-            ->whereBetween('created_at', [$request->start, $request->end])->get());
+            ->whereBetween('created_at', [$request->start, $request->end])->paginate(9));
     }
 
     //Search shops by name , address and tag
@@ -66,14 +66,14 @@ class ShopController extends Controller
                 $query->where('name', 'like', '%' . $search_value . '%')
                     ->orWhere('address', 'like', '%' . $search_value . '%')
                     ->orWhere('tag', 'like', '%' . $search_value . '%');
-            })->get();
+            })->paginate(9);
         }
 
        $data = Shop::where('user_id', $user->id)->where(function ($query) use ($search_value) {
                     $query->where('name', 'like', '%' . $search_value . '%')
                     ->orWhere('address', 'like', '%' . $search_value . '%')
                     ->orWhere('tag', 'like', '%' . $search_value . '%');
-                })->get();
+                })->paginate(9);
 
         return ShopResource::collection($data);
     }

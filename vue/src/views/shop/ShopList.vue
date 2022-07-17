@@ -236,38 +236,61 @@
 
 <script setup>
 import store from "@/store";
-import { computed, ref } from "vue";
+import { watch, ref } from "vue";
 import { useRouter } from "vue-router";
 import PageComponent from "@/components/PageComponent.vue";
 import ShopListItem from "./ShopListItem.vue";
 
-store.dispatch("getShops");
 store.dispatch("getUser");
-
+const router = useRouter();
 const isDragging = false;
-let range = ref({
+const masks = ref({ input: "YYYY-MM-DD h:mm A" });
+const user = store.state.user;
+const shops = ref({});
+const shop_state = ref({});
+
+const range = ref({
     start: new Date(2022, 1, 1),
     end: new Date(2022, 1, 31),
 });
 
-let masks = ref({ input: "YYYY-MM-DD h:mm A" });
+const search = ref({ key: "" });
+// const shops = computed(() => store.state.shops);
 
-let search = ref({ key: "" });
+watch(shop_state, async (newState) => {
+    if (newState == "search") {
+        store.dispatch("searchShop", { ...search.value });
+        shops.value = await store.state.shops;
+        shop_state.value = "change";
+    }
 
-const shops = computed(() => store.state.shops);
-const router = useRouter();
-const user = store.state.user;
+    if (newState == "filter") {
+        store.dispatch("filterShop", { ...range.value });
+        shops.value = await store.state.shops;
+        shop_state.value = "change";
+    }
+
+    if (newState == "default") {
+        store.dispatch("getShops");
+        shops.value = await store.state.shops;
+        shop_state.value = "change";
+    }
+});
+
+shop_state.value = "default";
 
 function searchShop() {
-    store.dispatch("searchShop", { ...search.value }).then(() => {
-        alert("ok");
-    });
+    shop_state.value = "search";
+    // store.dispatch("searchShop", { ...search.value }).then(() => {
+    //     alert("ok");
+    // });
 }
 
 function filterShop() {
-    store.dispatch("filterShop", { ...range.value }).then(() => {
-        alert("ok");
-    });
+    shop_state.value = "filter";
+    // store.dispatch("filterShop", { ...range.value }).then(() => {
+    //     alert("ok");
+    // });
 }
 
 function getForPage(ev, link) {

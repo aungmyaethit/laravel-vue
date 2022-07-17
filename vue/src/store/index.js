@@ -83,7 +83,6 @@ const store = createStore({
         searchShop({ commit }, shop) {
             commit("setShopLoading", true);
             return axiosClient.post("/shop/search", shop).then((res) => {
-                console.log(res.data);
                 commit("setShopLoading", false);
                 commit("setShops", res.data);
                 return res;
@@ -93,7 +92,6 @@ const store = createStore({
         filterShop({ commit }, shop) {
             commit("setShopLoading", true);
             return axiosClient.post("/shop/filter", shop).then((res) => {
-                console.log(res.data);
                 commit("setShopLoading", false);
                 commit("setShops", res.data);
                 return res;

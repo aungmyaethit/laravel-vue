@@ -74,7 +74,7 @@
                 <div class="grid grid-flow-col grid-rows-1 gap-4">
                     <div id="profile_img">
                         <img
-                            class="rounded-full w-30 h-30"
+                            class="w-20 h-20 rounded-full"
                             :src="user.data.profile_image_url"
                             :alt="user.data.name"
                         />
